@@ -1,17 +1,20 @@
-From node:18
+# Use official Node.js image
+FROM node:18
 
-WORKDIR app/
+# Set working directory
+WORKDIR /app
 
+# Copy package.json and package-lock.json first (for better caching)
 COPY package*.json ./
 
-RUN npm  install
+# Install dependencies
+RUN npm install
 
-COPY ..
+# Copy the rest of your source code
+COPY . .
 
-RUN npm run build
+# Expose Vite's default port
+EXPOSE 5173
 
-RUN npm install -g serve
-
-CMD ["serve" "-g" "build"]
-
-EXPOSE 3000
+# Start the app in development mode
+CMD ["npm", "run", "dev", "--", "--host"]
